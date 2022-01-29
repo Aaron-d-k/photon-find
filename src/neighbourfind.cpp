@@ -34,6 +34,8 @@ void fill_lookup(const std::string& rule, search_direction direction)
 				can_there_be_connection = ((rule_lookup[neighbourhood1] == ((i >> 4) & 0b1)) && (rule_lookup[neighbourhood2] == ((c >> 5) & 0b1)));
 			else if (direction == search_direction::side)//side first
 				can_there_be_connection = ((rule_lookup[neighbourhood1] == ((c >> 3) & 0b1)) && (rule_lookup[neighbourhood2] == ((c >> 2) & 0b1)));
+			else if (direction == search_direction::still_life)//still life search
+				can_there_be_connection = ((rule_lookup[neighbourhood1] == ((i >> 2) & 0b1)) && (rule_lookup[neighbourhood2] == ((c >> 3) & 0b1)));
 			else
 			{
 				std::cerr << "invalid search mode.";
@@ -108,8 +110,6 @@ void fill_lookup(const std::string& rule, search_direction direction)
 			}
 		}
 	}
-	//showlookupentry(0b010100);
-	//doforallphotonnextrow<4, symmetry::asym>(0b010, 0b100, [](row r) {print_info(r, "  "); });
 }
 
 

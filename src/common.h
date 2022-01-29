@@ -21,6 +21,7 @@ enum class search_direction
 	top,
 	side,
 	bottom,
+	still_life
 };
 
 /// <summary>

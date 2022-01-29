@@ -1,7 +1,7 @@
 photon-find
 -----------
 
-A program to find [photons](https://www.conwaylife.com/wiki/Photon) in isotropic 2-state [cellular automaton](https://en.wikipedia.org/wiki/Cellular_automaton). It supports:
+A program to find [photons](https://www.conwaylife.com/wiki/Photon) and [still lives](https://en.wikipedia.org/wiki/Still_life_(cellular_automaton)) in isotropic 2-state [cellular automaton](https://en.wikipedia.org/wiki/Cellular_automaton). It supports:
 
 * Searching photons with D2_+2 symmetry
 * Sideways, back-first and front-first searching
@@ -12,7 +12,7 @@ A program to find [photons](https://www.conwaylife.com/wiki/Photon) in isotropic
 Compiling
 --------
 
-To compile the program, you must have a c++ compiler. You can use an IDE like Visual Studio to run it after downloading.    
+To compile the program, you must have a C++ compiler. You can use an IDE like Visual Studio to run it after downloading.    
 Follow the relevant steps in [this tutorial](https://docs.microsoft.com/en-us/cpp/build/get-started-linux-cmake?view=msvc-170) to run it using Visual Studio.  
 
 

@@ -12,8 +12,8 @@
 * to join to the third row while printing the partial.to get more rows, index the table
 * using <third_to_last, second_to_last>.
 *
-* When extending a partial, if the new rowand last row have zeroes in the
-* same direction, then extend a shifted version of both rows too.remember to add
+* When extending a partial, if the new row and the last row have zeroes in the
+* same direction, then extend a shifted version of both rows too. Remember to add
 * appropriate entry to the transposition table.
 */
 

@@ -44,6 +44,7 @@ auto parseArgs(std::vector<std::string> args)
                 case 't': std::get<3>(outp) = search_direction::top; break;
                 case 's': std::get<3>(outp) = search_direction::side; break;
                 case 'b': std::get<3>(outp) = search_direction::bottom; break;
+                case 'f': std::get<3>(outp) = search_direction::still_life; break;
                 default: throw std::invalid_argument("not a side");
                 }
                 index++;
@@ -76,15 +77,15 @@ int main(int argc, char* argv[])
     if (argc == 1)
     {
         std::cout << R"(
-This is Photon-Find, a program to find photon in 2-state isotropic cellular automata.
+This is Photon-Find, a program to find photons in 2-state isotropic cellular automata.
 
-Usage: photonfind -r <rule> -w <width> -s (even|asym) [ -f (-d (t|s|b)) (-m (dfs|bfs)) (-t <num-threads>) -q]
+Usage: photonfind -r <rule> -w <width> -s (even|asym) [ -f (-d (t|s|b|f)) (-m (dfs|bfs)) (-t <num-threads>) -q]
 Options:
     -r <rule>           the rule in hensel notation.
     -w <width>          the search width (real width depends on symmetry). it should be an even number.
     -s (even|asym)      the symmetry of the search.
     -f                  perform a floating row search.
-    -d (t|s|b)          direction of search (t for top, s for side, b for bottom). [default: t]
+    -d (t|s|b|f)        direction of search (t for top, s for side, b for bottom, f for still lives). [default: t]
     -m (dfs|bfs)        whether to use dfs or bfs. [default: bfs]
     -t <num-threads>    number of threads to use. [default: 1]
     -q                  do not print partials and other info. only ship and depth reached.
@@ -99,6 +100,7 @@ Options:
     {
         const auto [width, sym, isfloating, sdirec, rule, srchtype, num_threads, be_quiet] = parseArgs(cmdline_arguments);
         spam_console = !be_quiet;
+        print_info("Started!\n");
         search_photon(width, sym, isfloating, sdirec, rule, srchtype, num_threads);
 
     }
