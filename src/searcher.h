@@ -63,7 +63,8 @@ public:
 		inner_searcher.initialise_for_search(to_start);
 
 		typename TypeOfSearch::TransposionTable transposition_table = inner_searcher.defaultttable;
-		inner_searcher.extend_dfs(to_start, &transposition_table);
+		int num_ships_left = max_ships;
+		inner_searcher.extend_dfs(to_start, &transposition_table, &num_ships_left);
 	}
 
 	void search_bfs(typename TypeOfSearch::LastRows to_start = {}, size_t max_partial_list_size = (1 << 23), size_t max_transposition_table_size = (1 << 24)) {
@@ -76,7 +77,7 @@ public:
 
 		std::vector<typename TypeOfSearch::LastRows> current_partials;
 		size_t height = 0;
-		bool quit = false;
+		int num_ships_left = max_ships;
 
 
 		while (!next_height_partials.empty())
@@ -89,9 +90,9 @@ public:
 				typename TypeOfSearch::LastRows to_extend = current_partials.back();
 				current_partials.pop_back();
 
-				inner_searcher.extend_bfs(to_extend, &transposition_table, &next_height_partials, &quit);
+				inner_searcher.extend_bfs(to_extend, &transposition_table, &next_height_partials, &num_ships_left);
 
-				if (quit) return;
+				if (num_ships_left <= 0) return;
 
 				if (next_height_partials.size() > max_partial_list_size)
 				{

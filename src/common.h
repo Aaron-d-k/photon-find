@@ -43,6 +43,8 @@ using grid2x3 = std::uint32_t;
 using row = std::uint64_t;
 
 extern bool spam_console;
+extern int max_ships;
+
 template<class... T>
 inline void print_info(T&&... t)
 {

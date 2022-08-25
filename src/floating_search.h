@@ -79,7 +79,7 @@ public:
 		fill_lookup(rule, direction);
 	}
 
-	void extend_dfs(LastRows to_extend, TransposionTable* transposition_table) const
+	void extend_dfs(LastRows to_extend, TransposionTable* transposition_table, int* num_ships_left) const
 	{
 		doforallphotonnextrow<search_width, symmetry::asym>(to_extend.first, to_extend.second,
 			[=, this](row r)
@@ -89,13 +89,14 @@ public:
 				{
 					print_info("done!\n");
 					std::cout << print_ship(to_extend, transposition_table);
+					(*num_ships_left)--;
 				}
 				for (int offset = -std::min(std::countl_zero(next.first) - (int)(64 - search_width), std::countl_zero(next.second) - (int)(64 - search_width)); offset <= std::min(std::countr_zero(next.first), std::countr_zero(next.second)); offset++)
 				{
 					LastRows partial_to_extend_next = offset_partial(next, offset);
-					if (transposition_table->insert({ partial_to_extend_next , { offset, to_extend.first } }).second)
+					if (transposition_table->insert({ partial_to_extend_next , { offset, to_extend.first } }).second && (*num_ships_left >= 0))
 					{
-						extend_dfs(partial_to_extend_next, transposition_table);
+						extend_dfs(partial_to_extend_next, transposition_table, num_ships_left);
 					}
 				}
 			}
@@ -141,7 +142,7 @@ public:
 		*t = new_t;
 	}
 
-	void extend_bfs(LastRows to_extend, TransposionTable* transposition_table, std::vector<LastRows>* next_height_partials, bool* quit) const
+	void extend_bfs(LastRows to_extend, TransposionTable* transposition_table, std::vector<LastRows>* next_height_partials, int* num_ships_left) const
 	{
 		doforallphotonnextrow<search_width, symmetry::asym>(to_extend.first, to_extend.second,
 			[=, this](row r)
@@ -153,7 +154,7 @@ public:
 					{
 						print_info("done!\n");
 						std::cout << print_ship(to_extend, transposition_table);
-						*quit = true;
+						(*num_ships_left)--;
 					}
 				}
 				for (int offset = -std::min(std::countl_zero(next.first) - (int)(64 - search_width), std::countl_zero(next.second) - (int)(64 - search_width)); offset <= std::min(std::countr_zero(next.first), std::countr_zero(next.second)); offset++)

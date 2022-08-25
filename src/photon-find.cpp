@@ -6,17 +6,19 @@
 
 
 bool spam_console = true;
+int max_ships = 1;
 
 auto parseArgs(std::vector<std::string> args)
 {
-    std::tuple<size_t, symmetry, bool, search_direction, std::string, search_type, size_t, bool> outp{};
-    std::array<bool, std::tuple_size_v<decltype(outp)>> has_given{ {false, false, true, true, false, true, true, true} };
+    std::tuple<size_t, symmetry, bool, search_direction, std::string, search_type, size_t, bool, int> outp{};
+    std::array<bool, std::tuple_size_v<decltype(outp)>> has_given{ {false, false, true, true, false, true, true, true, true} };
 
     std::get<2>(outp) = false;//floating or not
     std::get<3>(outp) = search_direction::top;
     std::get<5>(outp) = search_type::breadth_first_search;
     std::get<6>(outp) = 1; //number of threads to use
     std::get<7>(outp) = false; //quiet
+    std::get<8>(outp) = 1; //number of ships to find before exiting
 
     size_t index = 0;
 
@@ -50,13 +52,14 @@ auto parseArgs(std::vector<std::string> args)
                 index++;
                 break;
             case 'w': std::get<0>(outp) = std::stoull(args[index + 1]); has_given[0] = true; index++; break;
+            case 'e': std::get<8>(outp) = std::stoul(args[index + 1]); index++; break;
             case 't': std::get<6>(outp) = std::stoull(args[index + 1]); index++; break;
             case 'm':
                 if (args[index + 1] == "dfs") { std::get<5>(outp) = search_type::depth_first_search; }
                 else if (args[index + 1] == "bfs") { std::get<5>(outp) = search_type::breadth_first_search; }
                 else throw std::invalid_argument("not a search type");
                 index++;
-                break;
+                break;                
             default: throw std::invalid_argument("not a proper argument");
             }
         }
@@ -89,6 +92,7 @@ Options:
     -m (dfs|bfs)        whether to use dfs or bfs. [default: bfs]
     -t <num-threads>    number of threads to use. [default: 1]
     -q                  do not print partials and other info. only ship and depth reached.
+    -e                  maximum number of spaceships to print in bfs mode. [default: 1]
 )";
         return EXIT_SUCCESS;
     }
@@ -98,11 +102,11 @@ Options:
 
     try
     {
-        const auto [width, sym, isfloating, sdirec, rule, srchtype, num_threads, be_quiet] = parseArgs(cmdline_arguments);
+        const auto [width, sym, isfloating, sdirec, rule, srchtype, num_threads, be_quiet, maxships] = parseArgs(cmdline_arguments);
         spam_console = !be_quiet;
+        max_ships = maxships;
         print_info("Started!\n");
         search_photon(width, sym, isfloating, sdirec, rule, srchtype, num_threads);
-
     }
     catch (const std::invalid_argument& error)
     {

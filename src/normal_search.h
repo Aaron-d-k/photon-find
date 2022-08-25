@@ -72,7 +72,7 @@ public:
 		fill_lookup(rule, direction);
 	}
 
-	void extend_dfs(LastRows to_extend, TransposionTable* transposition_table) const
+	void extend_dfs(LastRows to_extend, TransposionTable* transposition_table, int* num_ships_left) const
 	{
 		doforallphotonnextrow<search_width, current_symmetry>(to_extend.first, to_extend.second,
 			[=, this](row r)
@@ -83,10 +83,11 @@ public:
 				{
 					print_info("done!\n");
 					std::cout << print_ship(to_extend, transposition_table);
+					(*num_ships_left)--;
 				} 
-				else if (transposition_table->insert({ next, to_extend }).second)
+				else if (transposition_table->insert({ next, to_extend }).second && (*num_ships_left >= 0))
 				{
-					extend_dfs(next, transposition_table);
+					extend_dfs(next, transposition_table, num_ships_left);
 				}
 			});
 	}
@@ -127,7 +128,7 @@ public:
 		*transposition_table = is_usefull_or_dependency;
 	}
 
-	void extend_bfs(LastRows to_extend, TransposionTable* transposition_table, std::vector<LastRows>* next_height_partials, bool* quit) const
+	void extend_bfs(LastRows to_extend, TransposionTable* transposition_table, std::vector<LastRows>* next_height_partials, int* num_ships_left) const
 	{
 		doforallphotonnextrow<search_width, current_symmetry>(to_extend.first, to_extend.second,
 			[=, this](row r)
@@ -139,7 +140,7 @@ public:
 					{
 						print_info("done!\n");
 						std::cout << print_ship(to_extend, transposition_table);
-						*quit = true;
+						(*num_ships_left)--;
 					}
 				}
 				else if (transposition_table->insert({ next, to_extend }).second)
